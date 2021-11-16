@@ -108,4 +108,38 @@
   6. CSP防御
 
     用于指定哪些内容可以执行, 没有指定的全部不信任`default-src self`
+## CSRF(Cross Site Request Forgy)跨站请求伪造
+### 变种
+    1. POST请求的话构造form表单,通过iframe跳转
+    2. Get请求,通过<a><img>, 内容中再添加a标签进行跳转
+### 原理
+![](./mdImg/CSRF原理.jpg)
+### CSRF危害
+    1. 利用用户登录态
+    2. 用户不知情
+    3. 完成业务请求
+    4. 盗取用户资金
+    5. 冒充用户发帖背锅
+### CSRF防御
+![](./mdImg/CSRF防御.jpg)
+  1. cookie
 
+    - 禁止第三方网站带Cookies
+    - same-site属性
+  2. 不访问A网站前端
+
+    - 在前端页面加入验证信息
+    - 验证码
+      攻击者网站不访问被攻击网站的前端所以拿不到验证码, 所以不能通过验证
+    - token
+      实现方式: 后端给前端的某个隐藏表单中加入token, 同时cookies中带有相同的token, 刚提交请求时, 验证cookies中的token和表单中的token是否相同, 因为CSRF不访问被攻击者的前端, 所以http请求中不会带有表单中的token值,所以可以防御
+      token的存储方式: 表单中的值/meta中/
+  3. referer为B网站
+
+    referer是http协议中的一个请求头, 会标明该请求来自哪里
+    - 验证referer
+  ```js
+  if(/^https?:\/\/localhost/.test(referer)){
+    throw new Error('非法请求')
+  }
+  ```
