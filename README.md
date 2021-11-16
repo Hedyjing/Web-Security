@@ -143,3 +143,70 @@
     throw new Error('非法请求')
   }
   ```
+## Cookies
+### 特性
+
+    - 前端数据存储
+    - 后端通过http头设置
+    - 请求时通过http头传给后端
+    - 前端可读写
+    - 遵守同源策略
+      - 协议,域名,端口
+---
+    - 域名
+    - expires(有效期)
+    - 路径
+      cookies可以作用于网站的哪一级, 只在当前路径下有效
+    - http-only
+      cookie只能在http协议中使用, js中无法使用
+    - secure
+      cookie只能在https中使用
+    > 在chrome devtools的cookies中可以看路径
+### 作用
+    - 存储个性化设置
+    - 存储未登录时用户唯一标识
+    - 存储已登录用户的凭证
+    - 存储其他业务数据
+登录用户凭证
+    
+    - 前端提交用户名和密码
+    - 后端验证用户名和密码
+    - 后端通过http头设置用户凭证
+    - 后续访问时后端先验证用户凭证
+---
+    - 用户ID
+      有隐患, 可以篡改cookie中的id来伪装用户
+    - 用户ID + 签名
+      签名是用算法算出id的复杂字符串, 不可逆, 通过设置一个签名和id的cookie, 根据传过来的签名和id, 通过id算出签名是否和传过来的签名一致来判断是否是该用户
+    - SessionId
+      把用户的登录数据(session对象)放入服务端的内存中, 通过给前端发送一个随机的数, 下次用户请求时带上这个随机数, 服务端根据这个数找到对应的session, 从而得到用户的登录信息.
+      服务器重启时, session会丢失, 可以存储在外存上
+    - token
+### cookies和XSS的关系
+    - XSS可能偷取Cookies(Document.cookie)
+    - http-only时cookie不会被偷
+### cookies和CSRF的关系
+    - CSRF利用了用户Cookies
+    - 攻击站点无法读写Cookies
+    - 最好能组织第三方使用cookies: same-site
+### Cookies-安全策略
+    - 签名防篡改
+      明文和签名都有, 只是验证该明文是否和该签名对应
+    - 私有变换(加密)
+      加密没有明文
+    - http-only(防止XSS)
+    - secure(https)
+    - same-site(防止CSRF,只兼容chrome)
+## 点击劫持
+通过iframe将目标网站放到页面上, 把iframe的透明度设为0, 诱导用户点击目标网站
+
+    - 用户亲手操作
+    - 用户不知情
+    - 盗取用户资金
+    - 获取用户敏感信息
+防御
+  
+    - 用js禁止iframe内嵌
+      内嵌时top!=window, 但js可被禁止
+    - X-FRAME-OPTIONS禁止内嵌, 可以禁止被iframe内嵌
+    - 验证码
