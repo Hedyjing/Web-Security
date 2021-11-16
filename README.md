@@ -210,3 +210,36 @@
       内嵌时top!=window, 但js可被禁止
     - X-FRAME-OPTIONS禁止内嵌, 可以禁止被iframe内嵌
     - 验证码
+## 传输安全
+![](./mdImg/HTTP传输窃听.jpg)
+通过traceroute + 域名 命令可以查看传输的节点
+
+    通过中间代理可以篡改http内容
+### HTTP窃听
+
+    - 窃听用户密码
+    - 窃听传输敏感信息
+    - 非法获取个人资料
+### HTTP篡改
+
+    - 插入广告
+    - 重定向网站
+    - 无法防御的XSS和CSRF攻击
+    > 案例
+      运营商劫持
+      广告
+      非该网站内容
+      局域网劫持
+      公共wifi获取密码
+### HTTPS
+![](./mdImg/HTTPS.jpg)
+![](./mdImg/中间人攻击.jpg)
+证书认证
+![](./mdImg/证书认证.jpg)
+
+    - 证书无法伪造
+    - 证书的私钥不被泄露
+    - 域名管理权不泄露
+    - CA坚守原则
+> 通过keycha查看浏览器的证书信任列表
+推荐用switchhost来配置host
